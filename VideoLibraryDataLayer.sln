@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoLibraryDataLayer", "VideoLibraryDataLayer\VideoLibraryDataLayer.csproj", "{6274A879-C4DA-4C05-88CA-79DA2AD6F7BA}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReferenceImplementation", "ReferenceImplementation", "{2DC3E428-E050-43B6-9DC2-1EB806C8B856}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoLibraryDLEFImplementation", "VideoLibraryDLEFImplementation\VideoLibraryDLEFImplementation.csproj", "{C6C3BF1E-B7AC-4498-BABA-2C24A0308741}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoLibraryTempTest", "VideoLibraryTempTest\VideoLibraryTempTest.csproj", "{BE447837-CC1D-453C-9FF0-C617C3F7C157}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{C6C3BF1E-B7AC-4498-BABA-2C24A0308741}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6C3BF1E-B7AC-4498-BABA-2C24A0308741}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6C3BF1E-B7AC-4498-BABA-2C24A0308741}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE447837-CC1D-453C-9FF0-C617C3F7C157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE447837-CC1D-453C-9FF0-C617C3F7C157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE447837-CC1D-453C-9FF0-C617C3F7C157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE447837-CC1D-453C-9FF0-C617C3F7C157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,5 +56,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
+		SolutionGuid = {D89FBAC2-82EC-4051-8B45-D1DB10A6B2C9}
 	EndGlobalSection
 EndGlobal
