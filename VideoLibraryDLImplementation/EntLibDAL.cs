@@ -14,26 +14,28 @@ namespace UCSD.VideoLibrary
         private Database db;
         public EntLibDAL ()
         {
-            DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
+            //DatabaseFactory.SetDatabaseProviderFactory(new DatabaseProviderFactory());
             db = DatabaseFactory.CreateDatabase();
         }
         public Collection<VideoSearchResult> SearchVideoLibrary(VideoSearchCriteria criteria)
         {
-            IEnumerable<VideoSearchResult> results = new Collection<VideoSearchResult>();
+            IEnumerable<VideoSearchResult> temp = new Collection<VideoSearchResult>();
+            
             
             if (criteria.IsEmpty())
             {
-                var tsql = "SELECT * FROM dbo.Videos";
-                results = db.ExecuteSqlStringAccessor<VideoSearchResult>(tsql);
+                var tsql = "SELECT * FROM dbo.Videos Where IsDeleted <> 1";
+                temp = db.ExecuteSqlStringAccessor<VideoSearchResult>(tsql);
             }
-            if(criteria.HasOneSearchCriteria())
+            if (criteria.HasOneSearchCriteria())
             {
 
             }
 
 
+            Collection<VideoSearchResult> result = new Collection <VideoSearchResult>(temp.ToList());
 
-            return (results as Collection<VideoSearchResult>);
+            return result;
 
 
         }
