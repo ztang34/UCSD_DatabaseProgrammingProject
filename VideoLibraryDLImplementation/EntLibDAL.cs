@@ -92,7 +92,7 @@ namespace UCSD.VideoLibrary
             }
 
             //check if user has already checked out this video
-            tsql = "SELECT count(*) from dbo.Checkouts Where UserId = @UserID and VideoID = @VideoID";
+            tsql = "SELECT count(*) from dbo.Checkouts Where UserId = @UserID and VideoID = @VideoID and ReturnDate is null";
             cmd = db.GetSqlStringCommand(tsql);
             db.AddInParameter(cmd, "VideoID", DbType.Int32, videoId);
             db.AddInParameter(cmd, "UserID", DbType.Guid, userId);
