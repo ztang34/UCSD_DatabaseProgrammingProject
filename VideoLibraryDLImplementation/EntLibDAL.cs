@@ -243,7 +243,7 @@ namespace UCSD.VideoLibrary
                 throw new Exception("Total copies cannot be negative");
             }
 
-            if(!IsUserInRole(userId,"Administrator"))
+            if(!IsUserAdmin(userId))
             {
                 throw new Exception("You cannot add or update video record because you are not an administraor");
             }
@@ -293,7 +293,7 @@ namespace UCSD.VideoLibrary
                 throw new Exception("Cannot find the user. This could be due to wrong user ID");
             }
 
-            if (!IsUserInRole(userId, "Administrator"))
+            if (!IsUserAdmin(userId))
             {
                 throw new Exception("You cannot add or update video record because you are not an administraor");
             }
@@ -378,23 +378,22 @@ namespace UCSD.VideoLibrary
             return isValidReviewID;
         }
 
-        private bool IsUserInRole(Guid userID, string roleName)
+        private bool IsUserAdmin(Guid userID)
         {
-            bool isUserInRole = false;
+            bool isUserAdmin = false;
 
-            var tsql = "select count(*) from dbo.UsersInRoles u INNER JOIN dbo.Roles r on u.RoleId = r.RoleId WHERE r.RoleName = @roleName and u.UserId = @userID";
+            var tsql = "select username from dbo.Users where UserId = @UserID";
             var cmd = db.GetSqlStringCommand(tsql);
-            db.AddInParameter(cmd, "RoleName", DbType.String, roleName);
             db.AddInParameter(cmd, "UserID", DbType.Guid, userID);
 
-            int count = (int)db.ExecuteScalar(cmd);
+           string username = (string)db.ExecuteScalar(cmd);
 
-            if(count == 1)
+            if(username.ToLower() == "admin")
             {
-                isUserInRole = true;
+                isUserAdmin = true;
             }
 
-            return isUserInRole;
+            return isUserAdmin;
         }
 
         private bool HasPendingCheckouts(int videoID)
