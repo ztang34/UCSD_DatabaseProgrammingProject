@@ -257,7 +257,7 @@ namespace UCSD.VideoLibrary
                 db.AddInParameter(cmd, "Director", DbType.String, video.Director);
                 db.AddInParameter(cmd, "Year", DbType.Int32, year);
                 db.AddInParameter(cmd, "TotalCopies", DbType.Int32, totalCopies);
-                db.AddInParameter(cmd, "FormatCode", DbType.String, video.Format.ToString());
+                db.AddInParameter(cmd, "FormatCode", DbType.String, TranslateVideoFormatToFormatCode(video.Format));
 
                 result =decimal.ToInt32((decimal)db.ExecuteScalar(cmd));
             }
@@ -413,6 +413,24 @@ namespace UCSD.VideoLibrary
             }
 
             return hasPendingCheckouts;
+        }
+
+        private string TranslateVideoFormatToFormatCode(VideoFormat format)
+        {
+            switch (format)
+            {
+                case VideoFormat.BluRay:
+                    return "BLU";
+                case VideoFormat.DVD:
+                    return "DVD";
+                case VideoFormat.VHS:
+                    return "VHS";
+                case VideoFormat.Unknown:
+                    return "Unknown";
+                default:
+                    return "Unknown";
+            }
+
         }
     }
 }
