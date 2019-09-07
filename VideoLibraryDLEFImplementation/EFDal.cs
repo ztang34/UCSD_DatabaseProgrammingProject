@@ -143,7 +143,7 @@ namespace UCSD.VideoLibrary
             using (var context = new VideoLibraryDLEFImplementation.VideoLibrary())
             {
                 //check if user has already checked out this video
-                if (context.Checkouts.Any(c => c.UserId == userId && c.VideoId == videoId && c.ReturnDate == null))
+                if (!context.Checkouts.Any(c => c.UserId == userId && c.VideoId == videoId && c.ReturnDate == null))
                 {
                     throw new Exception("You do not have this video!");
                 }
@@ -184,6 +184,7 @@ namespace UCSD.VideoLibrary
                 };
 
                 context.Reviews.Add(review);
+                context.SaveChanges();
                 return review.ReviewId;
             }
 
@@ -248,9 +249,9 @@ namespace UCSD.VideoLibrary
             int year = video.Year;
             int totalCopies = video.TotalCopies;
 
-            if (videoId != 0 && !ValidateVideoID(videoId))
+            if (videoId != 0 && !IsVideoIDExist(videoId))
             {
-                throw new Exception("Cannot find the video. This could be due to wrong video ID or this video has been removed from library");
+                throw new Exception("Cannot find the video. This could be due to wrong video ID ");
             }
 
             if (!ValidateUserID(userId))
@@ -271,6 +272,11 @@ namespace UCSD.VideoLibrary
             if (!IsUserAdmin(userId))
             {
                 throw new Exception("You cannot add or update video record because you are not an administraor");
+            }
+
+            if(video.Format == VideoFormat.Unknown)
+            {
+                throw new Exception("Video format cannot be empty");
             }
 
             using (var context = new VideoLibraryDLEFImplementation.VideoLibrary())
@@ -342,13 +348,25 @@ namespace UCSD.VideoLibrary
 
         using (var context = new VideoLibraryDLEFImplementation.VideoLibrary())
         {
-            isValidVideoID = context.Videos.Any(v => v.VideoId == videoID);
+            isValidVideoID = context.Videos.Any(v => v.VideoId == videoID && v.IsDeleted == false);
         }
 
         return isValidVideoID;
     }
 
-    private bool ValidateUserID(Guid userID)
+        private bool IsVideoIDExist(int videoID)
+        {
+            bool isValidVideoID = false;
+
+            using (var context = new VideoLibraryDLEFImplementation.VideoLibrary())
+            {
+                isValidVideoID = context.Videos.Any(v => v.VideoId == videoID);
+            }
+
+            return isValidVideoID;
+        }
+
+        private bool ValidateUserID(Guid userID)
     {
         bool isValidUserID = false;
 
@@ -360,7 +378,9 @@ namespace UCSD.VideoLibrary
         return isValidUserID;
     }
 
-    private bool ValidateReviewID(int reviewID)
+        
+
+        private bool ValidateReviewID(int reviewID)
     {
         bool isValidReviewID = false;
 

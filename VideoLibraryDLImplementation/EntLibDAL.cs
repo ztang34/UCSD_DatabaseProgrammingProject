@@ -223,9 +223,9 @@ namespace UCSD.VideoLibrary
             int year = video.Year;
             int totalCopies = video.TotalCopies;
 
-            if (videoId != 0 && !ValidateVideoID(videoId))
+            if (videoId != 0 && !IsVideoIDExist(videoId))
             {
-                throw new Exception("Cannot find the video. This could be due to wrong video ID or this video has been removed from library");
+                throw new Exception("Cannot find the video. This could be due to wrong video ID ");
             }
 
             if (!ValidateUserID(userId))
@@ -248,7 +248,12 @@ namespace UCSD.VideoLibrary
                 throw new Exception("You cannot add or update video record because you are not an administraor");
             }
 
-            if(videoId == 0)
+            if (video.Format == VideoFormat.Unknown)
+            {
+                throw new Exception("Video format cannot be empty");
+            }
+
+            if (videoId == 0)
             {
                 var tsql = "INSERT INTO dbo.Videos(Title, Director, Year, TotalCopies, FormatCode) Values(@Title, @Director, @Year, @TotalCopies, @FormatCode)" +
                     "SELECT SCOPE_IDENTITY()";
@@ -269,7 +274,7 @@ namespace UCSD.VideoLibrary
                 db.AddInParameter(cmd, "Director", DbType.String, video.Director);
                 db.AddInParameter(cmd, "Year", DbType.Int32, year);
                 db.AddInParameter(cmd, "TotalCopies", DbType.Int32, totalCopies);
-                db.AddInParameter(cmd, "FormatCode", DbType.String, video.Format.ToString());
+                db.AddInParameter(cmd, "FormatCode", DbType.String, TranslateVideoFormatToFormatCode(video.Format));
                 db.AddInParameter(cmd, "VideoID", DbType.Int32, videoId);
 
                 db.ExecuteNonQuery(cmd);
@@ -326,6 +331,25 @@ namespace UCSD.VideoLibrary
             bool isValidVideoID = false;
 
             string tsql = "SELECT count(*) from dbo.Videos Where VideoID = @VideoID and IsDeleted<> 1";
+            var cmd = db.GetSqlStringCommand(tsql);
+
+            db.AddInParameter(cmd, "VideoID", DbType.Int32, videoID);
+
+            int count = (int)db.ExecuteScalar(cmd);
+
+            if (count == 1)
+            {
+                isValidVideoID = true;
+            }
+
+            return isValidVideoID;
+        }
+
+        private bool IsVideoIDExist(int videoID)
+        {
+            bool isValidVideoID = false;
+
+            string tsql = "SELECT count(*) from dbo.Videos Where VideoID = @VideoID ";
             var cmd = db.GetSqlStringCommand(tsql);
 
             db.AddInParameter(cmd, "VideoID", DbType.Int32, videoID);
